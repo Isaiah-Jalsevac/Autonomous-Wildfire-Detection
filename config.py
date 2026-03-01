@@ -1,0 +1,20 @@
+# config.py
+
+#Camera
+FRAME_WIDTH = 256
+FRAME_HEIGHT = 192
+THERMAL_DEVICE = 4
+
+#Detection
+DETECTION_THRESHOLD = 120
+MIN_HOTSPOT_AREA = 2
+DETECTION_THRESHOLD_OVER_MEAN = 50
+
+
+#Data
+LOG_PATH = ''
+
+#UAV
+MAVLINK_PORT = 0
+MAVLINK_BAUD = 57600  # standard ArduPilot telemetry baud rate
+
