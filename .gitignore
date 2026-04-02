@@ -1,5 +1,4 @@
 #Project Data- logs, and thermal frames.
-data/
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
