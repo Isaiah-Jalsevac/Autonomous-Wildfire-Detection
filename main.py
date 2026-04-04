@@ -16,7 +16,8 @@ def main():
         print(f"failed to initialize camera: {e}")
         exit(1)
 
-    init_log(config.LOG_PATH) # initializes logging and logging path
+    # initializes logging and logging path
+    const_path, mean_path, mean_image_dir, const_image_dir = init_log(config.LOG_PATH)
 
     last_heartbeat = time.time() # start heartbeat timer
 
@@ -34,31 +35,53 @@ def main():
         if temp_map is None: # checks for NUC and frame read erors
             #print('NUC event happened or error occured. If persists check connection.')
             continue
+
+        contours_const = []
+        contours_mean = []
     
         if config.DETECTION_TYPE == 1: # Checks which detection method is being used
-            contours = detect_hotspot_mean(temp_map)
+            contours_mean = detect_hotspot_mean(temp_map)
+        elif config.DETECTION_TYPE == 0:
+            contours_const = detect_hotspot_const(temp_map)
         else:
-            contours = detect_hotspot_const(temp_map)
-    
-        if contours:# if detection occured, log it
+            contours_mean = detect_hotspot_mean(temp_map)
+            contours_const = detect_hotspot_const(temp_map)
+
+        if contours_mean:# if detection occured, log it
             #print(f"Hotspot over {config.DETECTION_THRESHOLD_CONST} degrees celsius detected")
             #print(f"Max temp: {temp_map.max():.1f}°C, Mean: {temp_map.mean():.1f}°C")
             max_temp = temp_map.max()
-            total_area = sum(cv2.contourArea(c) for c in contours)
-            log_detection(config.LOG_PATH, 'Detection', 0, 0, 0, max_temp, len(contours), total_area) # TODO: add drone position info
+            total_area = sum(cv2.contourArea(c) for c in contours_mean)
+            log_detection(mean_path, 'Detection', 0, 0, 0, max_temp, len(contours_mean), total_area) # TODO: add drone position info
 
             if current_time - last_frame_save > config.IMAGE_SAVE_COOLDOWN:
-                log_image(config.IMAGE_SAVE_DIR, frame, display)
+                log_image(mean_image_dir, frame, display)
                 last_frame_save = time.time()
+
+        if contours_const:# if detection occured, log it
+            #print(f"Hotspot over {config.DETECTION_THRESHOLD_CONST} degrees celsius detected")
+            #print(f"Max temp: {temp_map.max():.1f}°C, Mean: {temp_map.mean():.1f}°C")
+            max_temp = temp_map.max()
+            total_area = sum(cv2.contourArea(c) for c in contours_const)
+            log_detection(const_path, 'Detection', 0, 0, 0, max_temp, len(contours_const), total_area) # TODO: add drone position info
+
+            if current_time - last_frame_save > config.IMAGE_SAVE_COOLDOWN:
+                log_image(const_image_dir, frame, display)
+                last_frame_save = time.time()
+
+
+
 
         if time.time() > last_heartbeat + config.HEARTBEAT_FREQUENCY:
             #print('Heartbeat log saved')
-            log_heartbeat(config.LOG_PATH, 'Heartbeat', 0, 0, 0) # TODO: add drone position info
+            log_heartbeat(mean_path, 'Heartbeat', 0, 0, 0) # TODO: add drone position info
+            log_heartbeat(const_path, 'Heartbeat', 0, 0, 0) 
             last_heartbeat = time.time()
 
-        cv2.imshow('Thermal', display)  # uncomment to display thermal feed
-        if cv2.waitKey(1) == ord('q'):  # uncomment to enable q to quit
-            running = False
+        if config.SHOW_FEED == True:
+            cv2.imshow('Thermal', display)  # uncomment to display thermal feed
+            if cv2.waitKey(1) == ord('q'):  # uncomment to enable q to quit
+                running = False
 
     camera.release()
     cv2.destroyAllWindows()

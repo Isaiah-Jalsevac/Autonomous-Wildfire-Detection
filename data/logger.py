@@ -6,9 +6,9 @@ import os
 import csv
 import datetime
 
-def init_log():
+def init_log(log_path):
     timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-    run_dir = os.path.join('log', timestamp)
+    run_dir = os.path.join(log_path, timestamp)
     mean_image_dir = os.path.join(run_dir, 'mean_images')
     const_image_dir = os.path.join(run_dir, 'const_images')
     
