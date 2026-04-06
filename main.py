@@ -48,7 +48,7 @@ def main():
             contours_const = detect_hotspot_const(temp_map)
 
         if contours_mean:# if detection occured, log it
-            #print(f"Hotspot over {config.DETECTION_THRESHOLD_CONST} degrees celsius detected")
+            #print(f"Hotspot over {config.DETECTION_THRESHOLD_OVER_MEAN} degrees celsius above mean detected")
             #print(f"Max temp: {temp_map.max():.1f}°C, Mean: {temp_map.mean():.1f}°C")
             max_temp = temp_map.max()
             total_area = sum(cv2.contourArea(c) for c in contours_mean)
