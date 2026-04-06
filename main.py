@@ -39,11 +39,11 @@ def main():
         contours_const = []
         contours_mean = []
     
-        if config.DETECTION_TYPE == 1: # Checks which detection method is being used
+        if config.DETECTION_TYPE == 0: # Checks which detection method is being used
             contours_mean = detect_hotspot_mean(temp_map)
-        elif config.DETECTION_TYPE == 0:
+        if config.DETECTION_TYPE == 1:
             contours_const = detect_hotspot_const(temp_map)
-        else:
+        if config.DETECTION_TYPE == 2:
             contours_mean = detect_hotspot_mean(temp_map)
             contours_const = detect_hotspot_const(temp_map)
 

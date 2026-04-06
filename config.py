@@ -6,10 +6,10 @@ FRAME_HEIGHT = 192
 THERMAL_DEVICE = 4
 
 # detection
-DETECTION_TYPE = 0 # 0 is constant, 1 is mean, otherwise it is both
+DETECTION_TYPE = 2 # 0 is mean, 1 is constant, 2 is both
 DETECTION_THRESHOLD_CONST = 60
 MIN_HOTSPOT_AREA = 5
-DETECTION_THRESHOLD_OVER_MEAN = 50
+DETECTION_THRESHOLD_OVER_MEAN = 5
 
 
 # data
