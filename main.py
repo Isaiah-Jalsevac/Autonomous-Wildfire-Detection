@@ -23,7 +23,8 @@ def main():
 
     running = True # loop only runs if running is True
 
-    last_frame_save = 0
+    last_frame_save_mean = 0
+    last_frame_save_const = 0 
 
     # main loop
     while running:
@@ -54,9 +55,9 @@ def main():
             total_area = sum(cv2.contourArea(c) for c in contours_mean)
             log_detection(mean_path, 'Detection', 0, 0, 0, max_temp, len(contours_mean), total_area) # TODO: add drone position info
 
-            if current_time - last_frame_save > config.IMAGE_SAVE_COOLDOWN:
+            if current_time - last_frame_save_mean > config.IMAGE_SAVE_COOLDOWN:
                 log_image(mean_image_dir, frame, display)
-                last_frame_save = time.time()
+                last_frame_save_mean = time.time()
 
         if contours_const:# if detection occured, log it
             #print(f"Hotspot over {config.DETECTION_THRESHOLD_CONST} degrees celsius detected")
@@ -65,9 +66,9 @@ def main():
             total_area = sum(cv2.contourArea(c) for c in contours_const)
             log_detection(const_path, 'Detection', 0, 0, 0, max_temp, len(contours_const), total_area) # TODO: add drone position info
 
-            if current_time - last_frame_save > config.IMAGE_SAVE_COOLDOWN:
+            if current_time - last_frame_save_const > config.IMAGE_SAVE_COOLDOWN:
                 log_image(const_image_dir, frame, display)
-                last_frame_save = time.time()
+                last_frame_save_const = time.time()
 
 
 
