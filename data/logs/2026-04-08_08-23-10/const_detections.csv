@@ -1,3 +1,0 @@
-timestamp,log_type,latitude,longitude,altitude_m,max_temp_c,hotspot_count,hotspot_size
-2026-04-08 08:23:21.034042,Heartbeat,0,0,0,,,
-2026-04-08 08:23:31.073865,Heartbeat,0,0,0,,,
