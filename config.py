@@ -25,4 +25,5 @@ MAVLINK_GPS_RATE_HZ = 2
 # main
 SHOW_FEED = True # if true then shows feed of thermal camera
 HEARTBEAT_FREQUENCY = 10 # time in seconds between heartbeat logs
+GCS_ALERT_FREQUENCY = 120 # minimum time in seconds between detection allerts sent to ground station
 

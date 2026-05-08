@@ -29,6 +29,7 @@ def main():
         cv2.namedWindow('Thermal', cv2.WINDOW_NORMAL)
 
     last_heartbeat = time.time() # start heartbeat timer
+    last_gcs_alert = time.time() # start ground station alert timer
 
     running = True # loop only runs if running is True
 
@@ -66,8 +67,8 @@ def main():
             #print(f"Hotspot over {config.DETECTION_THRESHOLD_OVER_MEAN} degrees celsius above mean detected")
             #print(f"Max temp: {temp_map.max():.1f}°C, Mean: {temp_map.mean():.1f}°C")
             max_temp = temp_map.max()
-            total_area = sum(cv2.contourArea(c) for c in contours_mean)
-            log_detection(mean_path, 'Detection', lat, lon, alt, max_temp, len(contours_mean), total_area)
+            total_area_mean = sum(cv2.contourArea(c) for c in contours_mean)
+            log_detection(mean_path, 'Detection', lat, lon, alt, max_temp, len(contours_mean), total_area_mean)
 
             if current_time - last_frame_save_mean > config.IMAGE_SAVE_COOLDOWN:
                 log_image(mean_image_dir, frame, display)
@@ -77,23 +78,27 @@ def main():
             #print(f"Hotspot over {config.DETECTION_THRESHOLD_CONST} degrees celsius detected")
             #print(f"Max temp: {temp_map.max():.1f}°C, Mean: {temp_map.mean():.1f}°C")
             max_temp = temp_map.max()
-            total_area = sum(cv2.contourArea(c) for c in contours_const)
-            log_detection(const_path, 'Detection', lat, lon, alt, max_temp, len(contours_const), total_area)
+            total_area_const = sum(cv2.contourArea(c) for c in contours_const)
+            log_detection(const_path, 'Detection', lat, lon, alt, max_temp, len(contours_const), total_area_const)
 
             if current_time - last_frame_save_const > config.IMAGE_SAVE_COOLDOWN:
                 log_image(const_image_dir, frame, display)
                 last_frame_save_const = time.time()
 
 
+        if contours_const or contours_mean:
+            if current_time - last_gcs_alert > config.GCS_ALERT_FREQUENCY:
+                mavlink.send_detection_alert(lat, lon, alt, total_area_mean)
+                last_gcs_alert = current_time
 
 
         if time.time() > last_heartbeat + config.HEARTBEAT_FREQUENCY:
             #print('Heartbeat log saved')
             log_heartbeat(mean_path, 'Heartbeat', lat, lon, alt)
             log_heartbeat(const_path, 'Heartbeat', lat, lon, alt) 
-            last_heartbeat = time.time()
+            last_heartbeat = current_time
 
-        if config.SHOW_FEED == True:
+        if config.SHOW_FEED:
             for c in contours_mean + contours_const:
                 x, y, w, h = cv2.boundingRect(c)
                 cv2.rectangle(display, (x, y), (x+w, y+h), (0, 0, 255), 2)
