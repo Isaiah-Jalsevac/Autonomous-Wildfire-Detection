@@ -1,0 +1,8 @@
+timestamp,log_type,latitude,longitude,altitude_m,max_temp_c,hotspot_count,hotspot_size
+2026-04-07 20:27:30.842825,Heartbeat,0,0,0,,,
+2026-04-07 20:27:40.882259,Heartbeat,0,0,0,,,
+2026-04-07 20:27:50.918437,Heartbeat,0,0,0,,,
+2026-04-07 20:28:00.958160,Heartbeat,0,0,0,,,
+2026-04-07 20:28:10.958333,Heartbeat,0,0,0,,,
+2026-04-07 20:28:20.998204,Heartbeat,0,0,0,,,
+2026-04-07 20:28:31.034236,Heartbeat,0,0,0,,,

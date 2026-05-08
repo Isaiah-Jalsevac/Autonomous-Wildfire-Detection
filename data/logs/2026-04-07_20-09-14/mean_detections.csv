@@ -1,0 +1,2 @@
+timestamp,log_type,latitude,longitude,altitude_m,max_temp_c,hotspot_count,hotspot_size
+2026-04-07 20:09:15.465827,Detection,0,0,0,40.97500000000002,1,191.0
