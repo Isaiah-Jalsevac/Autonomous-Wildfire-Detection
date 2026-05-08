@@ -1,7 +1,7 @@
 #Project Data- logs, and thermal frames.
-data/logs/*.csv
-data/images/*.png
-data/images/*.npy
+data/logs/
+data/images/
+data/images/
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
